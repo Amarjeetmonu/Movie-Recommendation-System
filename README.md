@@ -1,3 +1,6 @@
+<img width="720" height="1600" alt="movie-1" src="https://github.com/user-attachments/assets/d746854b-4e53-4ed9-806e-f6fca038f813" />
+<img width="720" height="1600" alt="movie-2" src="https://github.com/user-attachments/assets/a669f0c5-728b-47c2-b821-30690ef45373" />
+<img width="720" height="1600" alt="movie-3" src="https://github.com/user-attachments/assets/10bcf18c-4626-4d73-96ff-c11392ac5ecf" />
 # 🎬 CineMatch — Movie Recommendation System
 
 **Discover your next favorite movie with CineMatch!**
