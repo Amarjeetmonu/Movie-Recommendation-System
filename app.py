@@ -372,13 +372,12 @@ st.markdown("""
 <div class="cinematch-footer">
     <h3>🎬 CineMatch</h3>
     <p>Discover your next favourite movie.</p>
-    <p>Created with ❤️ by <strong>Amarjeet Kumar</strong></p>
+    <p>Created by <strong>Amarjeet Kumar</strong></p>
     <p>
         <a href="mailto:amarjeetnitb@gmail.com">📧 Contact Us</a>
         <a href="https://github.com/Amarjeetmonu/Movie-Recommendation-System"
            target="_blank">💻 GitHub</a>
     </p>
-    <p>Built with Python, Streamlit and Machine Learning.</p>
     <div>© 2026 CineMatch. All rights reserved.</div>
 </div>
 """, unsafe_allow_html=True)
