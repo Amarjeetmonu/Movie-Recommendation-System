@@ -3,53 +3,71 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def load_movies():
-    movies = pd.read_csv("movies.csv", sep="\t")
+def prepare_movies(movies):
+    """Clean and prepare movie data for recommendations."""
 
-    # Clean column names
+    movies = movies.copy()
+
     movies.columns = movies.columns.str.lower().str.strip()
 
-    # Rename dataset columns to standard names
     rename_columns = {
         "movie_name": "title",
-        "genre": "genres"
+        "genre": "genres",
+        "name": "title",
+        "overview": "overview",
     }
 
     movies.rename(columns=rename_columns, inplace=True)
 
-    # Check required columns
-    if "title" not in movies.columns or "genres" not in movies.columns:
-        raise ValueError(
-            "Dataset mein movie_name/title aur genre/genres columns hone chahiye."
-        )
+    if "title" not in movies.columns:
+        raise ValueError("Movie data mein title column nahi hai.")
 
-    # Remove rows without movie titles
-    movies = movies.dropna(subset=["title"]).copy()
-    movies["title"] = movies["title"].astype(str).str.strip()
+    if "genres" not in movies.columns:
+        movies["genres"] = ""
+
+    movies["title"] = movies["title"].fillna("").astype(str).str.strip()
     movies["genres"] = movies["genres"].fillna("").astype(str)
 
-    # Convert comma-separated genres into pipe-separated genres
+    if "overview" not in movies.columns:
+        movies["overview"] = ""
+
+    movies["overview"] = movies["overview"].fillna("").astype(str)
+
+    # Convert TMDB genre lists into searchable text.
     movies["genres"] = movies["genres"].str.replace(
-        ",", "|", regex=False
-    )
+        ",", " ", regex=False
+    ).str.replace("|", " ", regex=False)
 
-    # Include overview, director and cast when available
-    feature_columns = ["genres"]
+    feature_columns = ["genres", "overview"]
 
-    for column in ["overview", "director", "cast"]:
+    for column in ["director", "cast", "original_language"]:
         if column in movies.columns:
             movies[column] = movies[column].fillna("").astype(str)
             feature_columns.append(column)
 
-    movies["combined_features"] = movies[feature_columns].agg(
-        " ".join, axis=1
+    movies["combined_features"] = (
+        movies[feature_columns].agg(" ".join, axis=1).str.strip()
     )
 
+    movies = movies[movies["title"] != ""].copy()
     movies = movies.reset_index(drop=True)
+
     return movies
 
 
+def load_movies():
+    """Load the existing local movie dataset."""
+
+    movies = pd.read_csv("movies.csv", sep="\t")
+    return prepare_movies(movies)
+
+
 def build_similarity(movies):
+    """Calculate content similarity between movies."""
+
+    if movies.empty:
+        return None
+
     vectorizer = TfidfVectorizer(
         stop_words="english",
         max_features=10000
@@ -59,11 +77,15 @@ def build_similarity(movies):
         movies["combined_features"]
     )
 
-    similarity = cosine_similarity(tfidf_matrix)
-    return similarity
+    return cosine_similarity(tfidf_matrix)
 
 
-def recommend_movies(movie_title, movies, similarity, n=5):
+def recommend_movies(movie_title, movies, similarity=None, n=5):
+    """Recommend similar movies using TF-IDF and cosine similarity."""
+
+    if movies.empty:
+        return pd.DataFrame()
+
     matches = movies[
         movies["title"].str.casefold() == movie_title.casefold()
     ]
@@ -71,17 +93,22 @@ def recommend_movies(movie_title, movies, similarity, n=5):
     if matches.empty:
         return pd.DataFrame()
 
+    # Build similarity matrix if one wasn't supplied.
+    if similarity is None:
+        similarity = build_similarity(movies)
+
+    if similarity is None:
+        return pd.DataFrame()
+
     movie_index = matches.index[0]
 
     scores = list(enumerate(similarity[movie_index]))
-    scores = sorted(scores, key=lambda x: x[1], reverse=True)
+    scores.sort(key=lambda item: item[1], reverse=True)
 
-    recommendations = []
-    for index, score in scores:
-        if index != movie_index:
-            recommendations.append(index)
+    recommendations = [
+        index
+        for index, score in scores
+        if index != movie_index
+    ][:n]
 
-        if len(recommendations) == n:
-            break
-
-    return movies.iloc[recommendations]
+    return movies.iloc[recommendations].copy()
