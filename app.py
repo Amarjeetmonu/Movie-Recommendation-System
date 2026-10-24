@@ -345,74 +345,41 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ================= PROFESSIONAL FOOTER =================
+st.markdown("""
+<style>
+.cinematch-footer {
+    margin-top: 50px;
+    padding: 30px 15px 20px;
+    text-align: center;
+    border-top: 1px solid #34343f;
+    color: #b8b8c8;
+}
+.cinematch-footer h3 {
+    color: #ff4b4b;
+    font-size: 26px;
+}
+.cinematch-footer a {
+    color: #ff7777;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.cinematch-footer a:hover {
+    color: white;
+    text-decoration: underline;
+}
+</style>
 
-st.markdown(
-    """
-    <style>
-    .cinematch-footer {
-        margin-top: 60px;
-        padding: 30px 15px 15px;
-        text-align: center;
-        border-top: 1px solid #34343f;
-        color: #b8b8c8;
-    }
+<div class="cinematch-footer">
+    <h3>🎬 CineMatch</h3>
+    <p>Discover your next favourite movie.</p>
+    <p>Created with ❤️ by <strong>Amarjeet Kumar</strong></p>
+    <p>
+        <a href="mailto:amarjeetnitb@gmail.com">📧 Contact Us</a>
+        <a href="https://github.com/Amarjeetmonu/Movie-Recommendation-System"
+           target="_blank">💻 GitHub</a>
+    </p>
+    <p>Built with Python, Streamlit and Machine Learning.</p>
+    <div>© 2026 CineMatch. All rights reserved.</div>
+</div>
+""", unsafe_allow_html=True)
 
-    .cinematch-footer h3 {
-        color: #ff4b4b;
-        font-size: 26px;
-        margin-bottom: 8px;
-    }
-
-    .cinematch-footer p {
-        font-size: 14px;
-        margin: 8px 0;
-    }
-
-    .cinematch-footer a {
-        color: #ff7777;
-        text-decoration: none;
-        margin: 0 10px;
-    }
-
-    .cinematch-footer a:hover {
-        color: white;
-        text-decoration: underline;
-    }
-
-    .cinematch-copyright {
-        margin-top: 22px;
-        font-size: 12px;
-        color: #888899;
-    }
-    </style>
-
-    <div class="cinematch-footer">
-        <h3>🎬 CineMatch</h3>
-
-        <p>Discover your next favourite movie.</p>
-
-        <p>
-            Created with ❤️ by <strong>Amarjeet Kumar</strong>
-        </p>
-
-        <p>
-            <a href="mailto:amarjeetnitb@gmail.com">
-                📧 Contact Us
-            </a>
-
-            <a href="https://github.com/Amarjeetmonu/Movie-Recommendation-System"
-               target="_blank">
-                💻 GitHub
-            </a>
-        </p>
-
-        <p>Built with Python, Streamlit and Machine Learning.</p>
-
-        <div class="cinematch-copyright">
-            © 2026 CineMatch. All rights reserved.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
